@@ -33,25 +33,25 @@ const HomeScreen = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, backgroundColor: 'white' }}>
         <View style={{ flex: 1 }}>
-          <Mytext text="SQLite Example" />
+          <Mytext text="Exemplo com SQLite" />
           <Mybutton
-            title="Register"
+            title="Incluir"
             customClick={() => navigation.navigate('Register')}
           />
           <Mybutton
-            title="Update"
+            title="Alterar"
             customClick={() => navigation.navigate('Update')}
           />
           <Mybutton
-            title="View"
+            title="Visualizar um Usuário"
             customClick={() => navigation.navigate('View')}
           />
           <Mybutton
-            title="View All"
+            title="Visualizar todos Usuários"
             customClick={() => navigation.navigate('ViewAll')}
           />
           <Mybutton
-            title="Delete"
+            title="Apagar"
             customClick={() => navigation.navigate('Delete')}
           />
         </View>

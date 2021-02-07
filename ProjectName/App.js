@@ -39,7 +39,7 @@ const App = () => {
           name="View"
           component={ViewUser}
           options={{
-            title: 'View User', //Set Header Title
+            title: 'Visualizar Usuário', //Set Header Title
             headerStyle: {
               backgroundColor: '#f4511e', //Set Header color
             },
@@ -53,7 +53,7 @@ const App = () => {
           name="ViewAll"
           component={ViewAllUser}
           options={{
-            title: 'View Users', //Set Header Title
+            title: 'Lista de Usuários', //Set Header Title
             headerStyle: {
               backgroundColor: '#f4511e', //Set Header color
             },
@@ -67,7 +67,7 @@ const App = () => {
           name="Update"
           component={UpdateUser}
           options={{
-            title: 'Update User', //Set Header Title
+            title: 'Alterar Usuário', //Set Header Title
             headerStyle: {
               backgroundColor: '#f4511e', //Set Header color
             },
@@ -81,7 +81,7 @@ const App = () => {
           name="Register"
           component={RegisterUser}
           options={{
-            title: 'Register User', //Set Header Title
+            title: 'Incluir Usuário', //Set Header Title
             headerStyle: {
               backgroundColor: '#f4511e', //Set Header color
             },
@@ -95,7 +95,7 @@ const App = () => {
           name="Delete"
           component={DeleteUser}
           options={{
-            title: 'Delete User', //Set Header Title
+            title: 'Apagar Usuário', //Set Header Title
             headerStyle: {
               backgroundColor: '#f4511e', //Set Header color
             },
