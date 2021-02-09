@@ -9,17 +9,19 @@ export default function App() {
 
   async function cadastrar() {
     await firebase.auth().createUserWithEmailAndPassword(email, senha)
-      .catch(function (error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        if (errorCode == 'auth/weak-password') {
-          alert('The password is too weak.');
-        } else {
-          alert(errorMessage);
-        }
-        console.log(error);
-      });
+    .then( (value) => {
+      alert('Usuario cadastrado:' + value.user.email)
+      setEmail('');
+      setSenha('');
+    }).catch((error) => {
+      if( error.code === 'auth/weak-password') {
+        alert('Senha precisa ser 6 digitos!!')
+      }
+      if( error.code === 'auth/invalid-email') {
+        alert('Email invalido!!')
+      }
+    });
+     
 
   }
 
