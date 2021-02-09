@@ -1,88 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { Text, TextInput, View, StyleSheet, FlatList, SafeAreaView, Button, ActivityIndicator } from 'react-native';
 import firebase from './src/firebaseConnections';
-import ListaUsers from './src/ListaUsers';
 
 
 export default function App() {
-  const [nome, setNome] = useState('');
-  const [cargo, setCargo] = useState('');
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const renderItem = ({ item }) => (
-    <View >
-      <Text >{item.nome}</Text>
-    </View>
-  );
-
-
-  useEffect(() => {
-    async function dados() {
-      await firebase.database().ref('usuarios').on('value', (snapshot) => {
-        setUsers([]);
-        snapshot.forEach((childItem) => {
-
-          let data = {
-            key: childItem.key,
-            nome: childItem.val().nome,
-            cargo: childItem.val().cargo
-          };
-          setUsers(oldArray => [...oldArray, data]);
-        })
-        setLoading(false);
-
-      })
-    }
-    dados();
-  }, []);
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
   async function cadastrar() {
-    if (nome != '' && cargo != '') {
-      let usuarios = await firebase.database().ref('usuarios');
-      let chave = (await usuarios.push()).key;
-      usuarios.child(chave).set({
-        nome: nome,
-        cargo: cargo
+    await firebase.auth().createUserWithEmailAndPassword(email, senha)
+      .catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode == 'auth/weak-password') {
+          alert('The password is too weak.');
+        } else {
+          alert(errorMessage);
+        }
+        console.log(error);
       });
-      setNome('');
-      setCargo('');
-      alert('Cadastrado com sucesso!!!');
-    }
 
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.areaInput}>
-        <Text>Nome</Text>
+        <Text>Email</Text>
         <TextInput style={styles.textInput}
-          onChangeText={(texto) => setNome(texto)}
-          value={nome}
-          placeholder='Digite seu nome:'>
+          onChangeText={(texto) => setEmail(texto)}
+          value={email}
+          placeholder='Digite seu email:'>
         </TextInput>
-        <Text>Cargo</Text>
+        <Text>Senha</Text>
         <TextInput style={styles.textInput}
-          value={cargo}
-          onChangeText={(texto) => setCargo(texto)}
-          placeholder='Digite seu cargo:'>
+          value={senha}
+          onChangeText={(texto) => setSenha(texto)}
+          placeholder='Digite sua senha:'>
         </TextInput>
-        <Button title='Salvar' onPress={cadastrar}></Button>
+        <Button title='Cadastrar' onPress={cadastrar}></Button>
       </View>
-      <SafeAreaView style={styles.container}>
-        {loading ?
-          (
-            <ActivityIndicator color="#AACC" size={60} />
-          )
-          : (
-            <FlatList
-              data={users}
-              renderItem={({ item }) => (<ListaUsers data={item} />)}
-              keyExtractor={item => item.key}
-            />)
-        }
-
-      </SafeAreaView>
-
     </View>
   )
 
