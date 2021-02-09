@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TextInput, View, StyleSheet, FlatList, SafeAreaView, Button } from 'react-native';
+import { Text, TextInput, View, StyleSheet, FlatList, SafeAreaView, Button, ActivityIndicator } from 'react-native';
 import firebase from './src/firebaseConnections';
+import ListaUsers from './src/ListaUsers';
 
 
 export default function App() {
   const [nome, setNome] = useState('');
   const [cargo, setCargo] = useState('');
-  const [users, setUsers] = useState([
-    { id: 1, nome: 'user1' },
-    { id: 2, nome: 'user2' },
-    { id: 3, nome: 'user3' },
-    { id: 4, nome: 'user4' },
-
-  ]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const renderItem = ({ item }) => (
     <View >
       <Text >{item.nome}</Text>
@@ -23,6 +19,17 @@ export default function App() {
   useEffect(() => {
     async function dados() {
       await firebase.database().ref('usuarios').on('value', (snapshot) => {
+        setUsers([]);
+        snapshot.forEach((childItem) => {
+
+          let data = {
+            key: childItem.key,
+            nome: childItem.val().nome,
+            cargo: childItem.val().cargo
+          };
+          setUsers(oldArray => [...oldArray, data]);
+        })
+        setLoading(false);
 
       })
     }
@@ -62,11 +69,18 @@ export default function App() {
         <Button title='Salvar' onPress={cadastrar}></Button>
       </View>
       <SafeAreaView style={styles.container}>
-        <FlatList
-          data={users}
-          renderItem={(renderItem)}
-          keyExtractor={item => item.id}
-        />
+        {loading ?
+          (
+            <ActivityIndicator color="#AACC" size={60} />
+          )
+          : (
+            <FlatList
+              data={users}
+              renderItem={({ item }) => (<ListaUsers data={item} />)}
+              keyExtractor={item => item.key}
+            />)
+        }
+
       </SafeAreaView>
 
     </View>
