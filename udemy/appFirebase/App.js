@@ -4,6 +4,7 @@ import firebase from './src/firebaseConnections';
 
 
 export default function App() {
+  const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [user, setUser] = useState('');
@@ -11,16 +12,22 @@ export default function App() {
   async function cadastrar() {
     await firebase.auth().createUserWithEmailAndPassword(email, senha)
       .then((value) => {
-        alert('Usuario cadastrado:' + value.user.email)
+        firebase.database().ref('usuarios').child(value.user.uid).set({
+          nome: nome
+        })
         setEmail('');
         setSenha('');
+        alert('Cadastrado com sucesso: ' + value.user.uid + ' Nome ' + nome);
       }).catch((error) => {
+        if (error.code === 'auth/email-already-in-use') {
+          alert('Email já cadastrado!!!')
+        } 
         if (error.code === 'auth/weak-password') {
           alert('Senha precisa ser 6 digitos!!')
         }
         if (error.code === 'auth/invalid-email') {
           alert('Email invalido!!')
-        }
+        } 
       });
 
   }
@@ -43,6 +50,12 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.areaInput}>
+      <Text>Nome</Text>
+        <TextInput style={styles.textInput}
+          onChangeText={(texto) => setNome(texto)}
+          value={nome}
+          placeholder='Digite seu nome:'>
+        </TextInput>
         <Text>Email</Text>
         <TextInput style={styles.textInput}
           onChangeText={(texto) => setEmail(texto)}
