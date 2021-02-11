@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Background, Container, AreaInput, Input, Logo } from './styles';
+import { Background, Container, AreaInput, Input, Logo, SubmitButton, SubmitText, Link, LinkText } from './styles';
 
 export default function SignIn() {
   return (
@@ -21,6 +21,13 @@ export default function SignIn() {
             autoCapitalize="none"
           />
         </AreaInput>
+        <SubmitButton>
+          <SubmitText>Acessar</SubmitText>
+        </SubmitButton>
+        <Link>
+          <LinkText>Criar uma conta!</LinkText>
+        </Link>
+        
       </Container>
     </Background>
   );
