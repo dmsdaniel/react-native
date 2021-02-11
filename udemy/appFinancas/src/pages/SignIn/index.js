@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text } from 'react-native';
 import { Background, Container, AreaInput, Input, Logo, SubmitButton, SubmitText, Link, LinkText } from './styles';
 
 export default function SignIn() {
+  const [email,setEmail] = useState('');
+  const [password, setPassword] = useState('');
   return (
     <Background>
       <Container>
@@ -12,6 +14,8 @@ export default function SignIn() {
             placeholder="email"
             autoCorrect={false}
             autoCapitalize="none"
+            value={email}
+            onChangeText={ (text) => setEmail(text)}
           />
         </AreaInput>
         <AreaInput>
@@ -19,6 +23,8 @@ export default function SignIn() {
             placeholder="senha"
             autoCorrect={false}
             autoCapitalize="none"
+            value={password}
+            onChangeText={ (text) => setPassword(text)}
           />
         </AreaInput>
         <SubmitButton>
