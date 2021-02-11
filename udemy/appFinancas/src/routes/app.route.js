@@ -8,7 +8,7 @@ const AppStack = createStackNavigator();
 function AppRoutes(){
     return(
         <AppStack.Navigator>
-            <AppStack.Screen nome="Home" component={HOme}/>
+            <AppStack.Screen nome="Home" component={Home}/>
         </AppStack.Navigator>
     )
 }
