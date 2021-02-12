@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Platform } from 'react-native';
 import { Background, Container, AreaInput, Input, Logo, SubmitButton, SubmitText, Link, LinkText } from '../SignIn/styles';
-
+import {AuthContext} from '../../contexts/auth';
 export default function SignUp() {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { user } = useContext(AuthContext);
     return (
         <Background>
             <Container behavior={Platform.OS === 'ios' ? 'padding' : ''}
