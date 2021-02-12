@@ -8,8 +8,11 @@ export default function SignIn() {
   const [email,setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
-  const { user } = useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
 
+  function handleSignIn(){
+    signIn(email, password);
+  }
   return (
     <Background>
       <Container behavior={Platform.OS === 'ios' ? 'padding': ''} 
@@ -34,7 +37,7 @@ export default function SignIn() {
             onChangeText={ (text) => setPassword(text)}
           />
         </AreaInput>
-        <SubmitButton>
+        <SubmitButton onPress={handleSignIn}>
           <SubmitText>Acessar</SubmitText>
         </SubmitButton>
         <Link onPress={ () => navigation.navigate('SignUp')}>
