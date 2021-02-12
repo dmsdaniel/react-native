@@ -9,7 +9,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
   const { user } = useContext(AuthContext);
-  console.log(user.nome);
+
   return (
     <Background>
       <Container behavior={Platform.OS === 'ios' ? 'padding': ''} 
