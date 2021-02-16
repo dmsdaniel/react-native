@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { View, Text, Button } from 'react-native';
 import { AuthContext } from '../../contexts/auth'
 import Header from '../../components/Header';
-import { Background, Container, Nome, Saldo, Title, List } from './style';
+import { Background, Container, Nome, Saldo, Title, List } from './styles';
 import HistoricoList from '../../components/HistoricoList';
 
 export default function Home() {
@@ -22,8 +22,8 @@ export default function Home() {
     <Background>
       <Header />
       <Container>
-        <Nome>{user.nome}</Nome>
-        <Saldo>123123,00</Saldo>
+        <Nome>{user && user.nome}</Nome>
+        <Saldo>{user && user.saldo}</Saldo>
       </Container>
       <Title>Ultimas Movimentações</Title>
       <List
