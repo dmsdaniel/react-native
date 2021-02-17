@@ -7,6 +7,9 @@ import Picker from '../../components/Picker';
 export default function New() {
     const [valor, setValor] = useState('');
     const [tipo, setTipo] = useState('receita');
+    function handleSubmit(){
+        alert(tipo + ' ' + valor);
+    }
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <Background>
@@ -21,7 +24,7 @@ export default function New() {
                         onChangeText={(text) => setValor(text)}
                     />
                     <Picker onChange={setTipo} tipo={tipo}/>
-                    <SubmitButton>
+                    <SubmitButton onPress={handleSubmit}>
                         <SubmitText>Registrar</SubmitText>
                     </SubmitButton>
                 </SafeAreaView>
