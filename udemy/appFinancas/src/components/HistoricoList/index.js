@@ -15,7 +15,7 @@ export default function HistoricoList( { data }) {
          <TipoText>{data.tipo}</TipoText>
        </IconView>
      </Tipo>
-     <ValorText>R$ {data.valor.toFixed(2)}</ValorText>
+     <ValorText>R$ {data.valor}</ValorText>
    </Container>
   );
 }
