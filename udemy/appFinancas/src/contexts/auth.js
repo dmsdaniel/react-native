@@ -78,8 +78,10 @@ function  AuthProvider({ children  }){
     }
 
     async function signOut(){
+        setLoadingAuth(true);
         await firebase.auth().signOut();
         await AsyncStorage.clear().then( () => {
+            setLoadingAuth(false);
             setUser(null);
         });
     }
