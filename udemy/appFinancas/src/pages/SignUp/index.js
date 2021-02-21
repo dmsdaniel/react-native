@@ -1,16 +1,17 @@
 import React, { useState, useContext } from 'react';
-import { Platform } from 'react-native';
+import { Platform, ActivityIndicator } from 'react-native';
 import { Background, Container, AreaInput, Input, Logo, SubmitButton, SubmitText, Link, LinkText } from '../SignIn/styles';
-import {AuthContext} from '../../contexts/auth';
+import { AuthContext } from '../../contexts/auth';
 export default function SignUp() {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { signUp } = useContext(AuthContext);
+    const { signUp, loadingAuth } = useContext(AuthContext);
 
-    function handleSignUp(){
+    function handleSignUp() {
         signUp(email, password, nome);
     }
+
     return (
         <Background>
             <Container behavior={Platform.OS === 'ios' ? 'padding' : ''}
@@ -24,7 +25,7 @@ export default function SignUp() {
                         value={nome}
                         onChangeText={(text) => setNome(text)}
                     />
-                </AreaInput>                
+                </AreaInput>
                 <AreaInput>
                     <Input
                         placeholder="email"
@@ -41,10 +42,18 @@ export default function SignUp() {
                         autoCapitalize="none"
                         value={password}
                         onChangeText={(text) => setPassword(text)}
+                        secureTextEntry={true}
                     />
                 </AreaInput>
                 <SubmitButton onPress={handleSignUp}>
-                    <SubmitText>Cadastrar</SubmitText>
+                    {
+                        loadingAuth ? (
+                            <ActivityIndicator size={20} color="#FFF" />
+                        ) : (
+                            <SubmitText>Cadastrar</SubmitText>
+                            )
+                    }
+                    
                 </SubmitButton>
             </Container>
         </Background>
