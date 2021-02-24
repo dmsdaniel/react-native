@@ -1,0 +1,13 @@
+bibliotecas react-native
+
+npm install react-cli
+npm install @react-navigation/native
+npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+npm install @react-navigation/drawer
+npm install react-native-vector-icons
+npm install styled-components
+
+sqlite
+npm install --save react-native-sqlite-storage
+react-native link react-native-sqlite-storage
+npm install @react-navigation/stack --save
