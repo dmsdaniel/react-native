@@ -1,17 +1,21 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Button, Alert } from 'react-native';
+import { Alert, Platform, TouchableOpacity } from 'react-native';
 import { AuthContext } from '../../contexts/auth'
 import Header from '../../components/Header';
-import { Background, Container, Nome, Saldo, Title, List } from './styles';
+import { Background, Container, Nome, Saldo, Title, List, Area } from './styles';
 import HistoricoList from '../../components/HistoricoList';
 import firebase from '../../services/firebaseConnection';
-import { format, isPast } from 'date-fns'
+import { format, isPast } from 'date-fns';
+import Icon  from 'react-native-vector-icons/MaterialIcons';
+import DatePicker from '../../components/DatePicker';
 
 export default function Home() {
   const [historico, setHistorico] = useState([]);
   const [saldo, setSaldo] = useState(0);
   const { user, signOut } = useContext(AuthContext);
   const uid = user && user.uid;
+  const [newDate, setNewDate] = useState(new Date());
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     async function loadList() {
@@ -21,12 +25,12 @@ export default function Home() {
 
       await firebase.database().ref('historico')
         .child(uid)
-        .orderByChild('date').equalTo(format(new Date, 'dd/MM/yy'))
+        .orderByChild('date').equalTo(format(newDate, 'dd/MM/yy'))
         .limitToLast(10)
         .on('value', (snapshot) => {
           setHistorico([]);
           snapshot.forEach((childItem) => {
-            let list = {  
+            let list = {
               key: childItem.key,
               tipo: childItem.val().tipo,
               valor: childItem.val().valor,
@@ -38,10 +42,10 @@ export default function Home() {
     }
     loadList();
 
-  }, []);
+  }, [newDate]);
 
   function handleDelete(data) {
-    if ( isPast( new Date(data.date) ) ) {
+    if (isPast(new Date(data.date))) {
       alert('Não pode ser deletado!');
       return;
     }
@@ -51,7 +55,7 @@ export default function Home() {
       [
         {
           text: 'Cancelar',
-          style:'cancel'
+          style: 'cancel'
         },
         {
           text: 'Continuar',
@@ -59,20 +63,35 @@ export default function Home() {
         }
       ]
     )
-    
+
 
   }
 
-  async function handleDeleteSuccess(data){
+  async function handleDeleteSuccess(data) {
     await firebase.database().ref('historico').child(uid).child(data.key).remove()
-    .then( async ()=>{
-      let saldoAtual = saldo;
-      data.tipo === 'despesa' ? saldoAtual += parseFloat(data.valor) :  saldoAtual -= parseFloat(data.valor);
-      await firebase.database().ref('users').child(uid).child('saldo').set(saldoAtual);
-    })
-    .catch((error) => {
-      alert(error);
-    })
+      .then(async () => {
+        let saldoAtual = saldo;
+        data.tipo === 'despesa' ? saldoAtual += parseFloat(data.valor) : saldoAtual -= parseFloat(data.valor);
+        await firebase.database().ref('users').child(uid).child('saldo').set(saldoAtual);
+      })
+      .catch((error) => {
+        alert(error);
+      })
+
+  }
+
+  function handleShowPicker(){
+    setShow(true);
+  }
+
+  function handleClose(){
+    setShow(false);
+  }
+
+  const onChange = (date) => {
+    setShow(Platform.OS === 'ios');
+    setNewDate(date);
+    console.log(date);
 
   }
 
@@ -83,13 +102,22 @@ export default function Home() {
         <Nome>{user && user.nome}</Nome>
         <Saldo>R$ {saldo}</Saldo>
       </Container>
-      <Title>Ultimas Movimentações</Title>
+      <Area>
+        <TouchableOpacity onPress={handleShowPicker}>
+          <Icon name="event" size={30} color="#fff"/>
+        </TouchableOpacity>
+        <Title>Ultimas Movimentações</Title>
+      </Area>
+
       <List
         showsVerticalScrollIndicator={false}
         data={historico}
         keyExtractor={item => item.key}
         renderItem={({ item }) => (<HistoricoList data={item} deleteItem={handleDelete} />)}
       />
+      { show && (
+        <DatePicker onClose={handleClose}  date={newDate} onChange={onChange}/>
+      )}
     </Background>
 
   );
