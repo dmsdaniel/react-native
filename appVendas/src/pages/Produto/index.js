@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native'
-import { View, Text, Button, TextInput, Alert } from 'react-native';
-import { List } from './style';
+import { useNavigation, StyleSheet } from '@react-navigation/native'
+import Header from '../../components/Header';
+import { View, Text, Button, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { List, Container, Area, ButtonMenu } from './style';
 import { openDatabase } from 'react-native-sqlite-storage';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 var db = openDatabase({ name: 'UserDatabase.db' });
 
 
 export default function Produto() {
 
+    const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
     const [nomeproduto, setNomeproduto] = useState('');
     const [valor, setValor] = useState(0);
@@ -15,7 +18,7 @@ export default function Produto() {
 
     useEffect(() => {
         function loadProdutos() {
-
+            setLoading(true);
             db.transaction((tx) => {
                 tx.executeSql(
                     'SELECT * FROM table_produto',
@@ -29,65 +32,94 @@ export default function Produto() {
                 )
             });
 
+
         }
         loadProdutos();
-    }, [])
+        setLoading(false);
+    }, [produtos])
 
-
+    function handleDelete(id) {
+        setLoading(true);
+        db.transaction(function (tx) {
+            tx.executeSql(
+                'DELETE FROM table_produto WHERE id = (?)',
+                [id],
+                (tx, results) => {
+                    console.log('Results', results.rowsAffected);
+                    if (results.rowsAffected > 0) {
+                        alert('Excluido com sucesso!');
+                    }
+                }
+            );
+        });
+        setLoading(false);
+    }
 
     let onPress = () => {
-        console.log({ nomeproduto }, { valor });
 
+        setLoading(true);
         db.transaction(function (tx) {
             tx.executeSql(
                 'INSERT INTO table_produto (descricao) VALUES (?)',
                 [nomeproduto],
                 (tx, results) => {
-                    console.log('Results asdadasd', results.rowsAffected);
-                    if (results.rowsAffected > 0) {
-                        Alert.alert(
-                            'Success',
-                            'You are Registered Successfully',
-                            [
-                                {
-                                    text: 'Ok',
-                                    onPress: () => navigation.navigate('Produtos'),
-                                },
-                            ],
-                            { cancelable: false }
-                        );
-                    } else alert('Registration Failed');
+                    if (results.rowsAffected = 0) {
+                        alert('Inclusao Falhou');
+                    }
                 }
             );
         });
+        setLoading(false);
     };
 
     return (
 
-        <View>
-            <View style={{ flexDirection: 'row', alignContent: 'space-between', alignItems: 'flex-start' }}>
-                <TextInput style={{ borderWidth: 1, marginLeft: 10 }} underlineColorAndroid="transparent"
+        <Container>
+            <Header />
+            <View style={{ flexDirection: 'row', alignContent: 'space-between', alignItems: 'flex-start', backgroundColor: 'green' }}>
+                <TextInput style={{ borderWidth: 1, marginLeft: 10, color: '#fff' }} underlineColorAndroid="transparent"
                     placeholder="Descricao"
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     onChangeText={(value) => setNomeproduto(value)} />
-                <TextInput style={{ borderWidth: 1, marginLeft: 10 }} underlineColorAndroid="transparent"
+                <TextInput style={{ borderWidth: 1, marginLeft: 10, color: '#fff' }} underlineColorAndroid="transparent"
                     placeholder="Valor"
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     onChangeText={(value) => setValor(value)} />
             </View>
-            <Button title='Salvar' onPress={onPress}></Button>
-            <View >
+
+            <ButtonMenu onPress={onPress} >
+                <Text style={{ backgroundColor: 'blue', fontSize: 30, textAlign: 'center' }}>Salvar</Text>
+            </ButtonMenu>
+            <View style={{ flex: 1, flexDirection: 'row', alignContent: 'space-between', alignItems: 'flex-start', backgroundColor: 'white' }}>
                 <List
                     showsVerticalScrollIndicator={false}
                     data={produtos}
                     keyExtractor={item => item.id}
-                    renderItem={({ item }) => (<Text>{item.descricao}</Text>)}
-                />
+                    renderItem={({ item }) => (
+                        <View style={{ elevation: 8, marginBottom: 5, borderRadius: 15, backgroundColor: '#575fCF', padding: 20 }}>
+                            <Text style={{ color: 'white' }}>
+                                {item.descricao}
+
+                            </Text>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                                <ButtonMenu onPress={() => handleDelete(item.id)}>
+                                    <Icon name='delete' color='white' size={20} />
+                                </ButtonMenu>
+                                <ButtonMenu onPress={() => handleDelete(item.id)}>
+                                    <Icon name='edit' color='white' size={20} />
+                                </ButtonMenu>
+                            </View>
+                        </View>
+                    )} >
+
+                </List>
             </View>
 
-        </View>
+        </Container>
 
     );
+
 }
+
