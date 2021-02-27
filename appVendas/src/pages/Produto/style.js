@@ -30,16 +30,16 @@ color: #00b94a;
 font-size: 19px;
 margin-bottom: 10px;
 `
-;
+    ;
 
 export const Area = styled.View`
-flex-direction: row;
-align-items: baseline;
-align-content: center;
-background-color: #000;
-  
+margin-bottom: 5px;
+border-radius: 15px;
+background-color: #575fCF;
+padding: 20px;
+ 
 `
-;
+    ;
 
 export const ButtonMenu = styled.TouchableWithoutFeedback`
 flex: 1;
@@ -47,7 +47,7 @@ height: 50px;
 justify-content: center;
 align-content: center;
 
- `;  
+ `;
 
 export const List = styled.FlatList.attrs({
     marginHorizontal: 0
@@ -58,4 +58,4 @@ export const List = styled.FlatList.attrs({
     padding-left: 10;
     margin-right: 10;
 `
-;
+    ;

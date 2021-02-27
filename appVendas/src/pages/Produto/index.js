@@ -98,7 +98,7 @@ export default function Produto() {
                     data={produtos}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => (
-                        <View style={{ elevation: 8, marginBottom: 5, borderRadius: 15, backgroundColor: '#575fCF', padding: 20 }}>
+                        <Area >
                             <Text style={{ color: 'white' }}>
                                 {item.descricao}
 
@@ -111,7 +111,7 @@ export default function Produto() {
                                     <Icon name='edit' color='white' size={20} />
                                 </ButtonMenu>
                             </View>
-                        </View>
+                        </Area>
                     )} >
 
                 </List>
