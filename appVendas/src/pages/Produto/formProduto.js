@@ -41,13 +41,17 @@ export default function App() {
       />
       {errors.categoria && <Text>Digite uma categoria.</Text>}
 
-          
-      <Button style={{width: 120, height: 50, backgroundColor: 'blue'}} onPress={handleSubmit((data) => salvar(data))}>
-        <Text style={{alignContent: 'center', color: 'white', fontSize: 25, fontWeight: "bold",marginTop: 5}}>
+
+      <Button style={{width: 130, height: 50, backgroundColor: 'blue',padding: 5, marginLeft: 10, borderRadius: 15}} onPress={handleSubmit((data) => salvar(data))}>
+        
+        <Text style={{alignContent: 'center', justifyContent: "space-between", color: 'white', fontSize: 25, fontWeight: "bold",marginTop: 5}}>
+        <Icon style={{marginLeft: 10}} name='save' color='white' size={25}  />
           Salvar
-        <Icon name='save' color='white' size={25}  />
         </Text>
+        
       </Button>
+      
+
 
 
       

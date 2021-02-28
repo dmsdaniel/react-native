@@ -36,7 +36,7 @@ export const Area = styled.View`
 margin-bottom: 5px;
 border-radius: 15px;
 background-color: #575fCF;
-padding: 20px;
+padding: 5px;
  
 `
     ;
