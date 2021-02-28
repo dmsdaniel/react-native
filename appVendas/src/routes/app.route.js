@@ -3,6 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Home from '../pages/Home';
 import Produto from '../pages/Produto';
 import Cadastros from '../pages/Cadastros';
+import FormProduto from '../pages/Produto/formProduto';
 import CustomDrawer  from '../components/CustomDrawer';
 
 const AppDrawer = createDrawerNavigator();
@@ -30,6 +31,7 @@ function AppRoutes() {
         >
             <AppDrawer.Screen name="Home" component={Home} />
             <AppDrawer.Screen name="Produtos" component={Produto} />
+            <AppDrawer.Screen name="Formulario" component={FormProduto} />
             <AppDrawer.Screen name="Cadastros" component={Cadastros} />
 
         </AppDrawer.Navigator>

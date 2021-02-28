@@ -49,6 +49,9 @@ align-content: center;
 
  `;
 
+ export const Button = styled.TouchableOpacity`
+ `;
+
 export const List = styled.FlatList.attrs({
     marginHorizontal: 0
 })`
