@@ -33,17 +33,16 @@ margin-bottom: 10px;
     ;
 
 export const Area = styled.View`
-margin-bottom: 5px;
+margin-bottom: 1px;
 border-radius: 15px;
-background-color: #575fCF;
-padding: 5px;
+background-color: #fff;
+padding: 1px;
  
 `
     ;
 
 export const ButtonMenu = styled.TouchableWithoutFeedback`
 flex: 1;
-height: 50px;
 justify-content: center;
 align-content: center;
 

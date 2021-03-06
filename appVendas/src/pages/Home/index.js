@@ -12,17 +12,23 @@ export default function Home() {
   useEffect(() => {
     db.transaction(function (txn) {
       txn.executeSql(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='table_produto'",
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='table_categoria'",
         [],
         function (tx, res) {
           
           console.log('item:', res.rows.length);
           if (res.rows.length == 0) {
             txn.executeSql('DROP TABLE IF EXISTS table_produto', []);
+            txn.executeSql('DROP TABLE IF EXISTS table_cagegoria', []);
             txn.executeSql(
               'CREATE TABLE IF NOT EXISTS table_produto(id INTEGER PRIMARY KEY AUTOINCREMENT, descricao VARCHAR(20))',
               []
             );
+            txn.executeSql(
+              'CREATE TABLE IF NOT EXISTS table_categoria(id INTEGER PRIMARY KEY AUTOINCREMENT, descricao VARCHAR(20))',
+              []
+            );
+            
           }
         }
       );

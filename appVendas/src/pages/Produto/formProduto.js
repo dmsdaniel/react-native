@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View } from "react-native";
 import { TextInput } from 'react-native-paper';
 import { useForm, Controller } from "react-hook-form";
@@ -11,18 +11,62 @@ var db = openDatabase({ name: 'UserDatabase.db' });
 export default function App() {
   const { control, handleSubmit, errors } = useForm();
   const [categoria, setCategoria] = useState({ categoria: '', id: '' });
-  const [categoriaList, setCategoriaList] = useState([
-    { id: 1, categoria: 'categoria 1' },
-    { id: 2, categoria: 'categoria 2' },
-    { id: 3, categoria: 'categoria 3' },
-    { id: 4, categoria: 'categoria 4' },
-    { id: 5, categoria: 'categoria 5' }
-  ]);
+  const [loading, setLoading] = useState(false);
+  const [categoriaList, setCategoriaList] = useState([]);
   const { edicao, setEdicao } = useState(false);
-  function salvar(data) {
-    setCategoria({ categoria: data.categoria });
-    console.log(categoria);
+
+  useEffect(() => {
+    function loadCategorias() {
+      setLoading(true);
+      db.transaction((tx) => {
+        tx.executeSql(
+          'SELECT * FROM table_categoria',
+          [],
+          (tx, results) => {
+            var temp = [];
+            for (let i = 0; i < results.rows.length; ++i)
+              temp.push(results.rows.item(i));
+            setCategoriaList(temp);
+          }
+        )
+      });
+
+
+    }
+    loadCategorias();
+    console.log(categoriaList)
+    setLoading(false);
+  }, [])
+
+  let handleSalvar = (data) => {
+    console.log(data.categoria);
+    setLoading(true);
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'INSERT INTO table_categoria (descricao) VALUES (?)',
+        [data.categoria],
+        (tx, results) => {
+          if (results.rowsAffected = 0) {
+            alert('Inclusao Falhou');
+          }
+        }
+      );
+    });
+    setLoading(false);
+  };
+
+  const FlatListItemSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 2,
+          width: "100%",
+          backgroundColor: "gray",
+        }}
+      />
+    );
   }
+
   return (
     <View style={{ flex: 1, flexDirection: 'column', padding: 10 }}>
       <Controller
@@ -42,37 +86,35 @@ export default function App() {
       {errors.categoria && <Text>Digite uma categoria.</Text>}
 
 
-      <Button style={{width: 130, height: 50, backgroundColor: 'blue',padding: 5, marginLeft: 10, borderRadius: 15}} onPress={handleSubmit((data) => salvar(data))}>
-        
-        <Text style={{alignContent: 'center', justifyContent: "space-between", color: 'white', fontSize: 25, fontWeight: "bold",marginTop: 5}}>
-        <Icon style={{marginLeft: 10}} name='save' color='white' size={25}  />
+      <Button style={{ width: 130, height: 50, backgroundColor: 'blue', padding: 5, marginLeft: 10, borderRadius: 15 }} onPress={handleSubmit((data) => handleSalvar(data))}>
+
+        <Text style={{ alignContent: 'center', justifyContent: "space-between", color: 'white', fontSize: 25, fontWeight: "bold", marginTop: 5 }}>
+          <Icon style={{ marginLeft: 10 }} name='save' color='white' size={25} />
           Salvar
         </Text>
-        
+
       </Button>
-      
 
-
-
-      
-
-      <View style={{ flex: 1, flexDirection: 'row', alignContent: 'space-between', alignItems: 'flex-start', backgroundColor: 'white' }}>
+      <View style={{ flex: 1, flexDirection: 'column', alignContent: 'space-between', alignItems: 'flex-start', backgroundColor: 'white' }}>
         <List
           showsVerticalScrollIndicator={false}
           data={categoriaList}
           keyExtractor={item => item.id}
+          ItemSeparatorComponent={FlatListItemSeparator}
           renderItem={({ item }) => (
             <Area >
-              <Text style={{ color: 'white' }}>
-                {item.categoria}
-              </Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                <Text style={{ color: '#000', width: '90%' }}>
+                  {item.descricao}
+                </Text>
                 <ButtonMenu >
-                  <Icon name='delete' color='white' size={20} />
+                  <Icon name='delete' color='black' size={20} />
                 </ButtonMenu>
                 <ButtonMenu >
-                  <Icon name='edit' color='white' size={20} />
+                  <Icon name='edit' color='black' size={20} />
                 </ButtonMenu>
+
               </View>
             </Area>
           )} >
