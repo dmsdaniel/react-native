@@ -5,6 +5,7 @@ import { View, Text, Button, TextInput, Alert, ActivityIndicator } from 'react-n
 import { List, Container, Area, ButtonMenu } from './style';
 import { openDatabase } from 'react-native-sqlite-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { set } from 'react-native-reanimated';
 var db = openDatabase({ name: 'UserDatabase.db' });
 
 
@@ -15,6 +16,7 @@ export default function Produto() {
     const [nomeproduto, setNomeproduto] = useState('');
     const [valor, setValor] = useState(0);
     const [produtos, setProdutos] = useState([]);
+    const [atualizar, setAtualizar] = useState(true);
 
     useEffect(() => {
         function loadProdutos() {
@@ -31,12 +33,11 @@ export default function Produto() {
                     }
                 )
             });
-
-
+            setLoading(false);
         }
         loadProdutos();
-        setLoading(false);
-    }, [produtos])
+        
+    }, [atualizar])
 
     function handleDelete(id) {
         setLoading(true);
@@ -53,6 +54,7 @@ export default function Produto() {
             );
         });
         setLoading(false);
+        setAtualizar(true);
     }
 
     let onPress = () => {
@@ -70,6 +72,7 @@ export default function Produto() {
             );
         });
         setLoading(false);
+        setAtualizar(true);
     };
 
     return (

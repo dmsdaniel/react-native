@@ -13,6 +13,7 @@ export default function App() {
   const [categoria, setCategoria] = useState({ categoria: '', id: '' });
   const [loading, setLoading] = useState(false);
   const [categoriaList, setCategoriaList] = useState([]);
+  const [atualizar, setAtualizar] = useState(false);
   const { edicao, setEdicao } = useState(false);
 
   useEffect(() => {
@@ -30,16 +31,15 @@ export default function App() {
           }
         )
       });
+      setAtualizar(false);
 
 
     }
     loadCategorias();
-    console.log(categoriaList)
-    setLoading(false);
-  }, [])
+    
+  }, [atualizar])
 
-  let handleSalvar = (data) => {
-    console.log(data.categoria);
+  function  handleSalvar(data) {
     setLoading(true);
     db.transaction(function (tx) {
       tx.executeSql(
@@ -52,8 +52,26 @@ export default function App() {
         }
       );
     });
-    setLoading(false);
+    setAtualizar(true);
   };
+
+  function handleDelete(id) {
+    setLoading(true);
+    db.transaction(function (tx) {
+        tx.executeSql(
+            'DELETE FROM table_categoria WHERE id = (?)',
+            [id],
+            (tx, results) => {
+                console.log('Results', results.rowsAffected);
+                if (results.rowsAffected > 0) {
+                    alert('Excluido com sucesso!');
+                }
+            }
+        );
+    });
+    setAtualizar(true);
+}
+
 
   const FlatListItemSeparator = () => {
     return (
@@ -108,7 +126,7 @@ export default function App() {
                 <Text style={{ color: '#000', width: '90%' }}>
                   {item.descricao}
                 </Text>
-                <ButtonMenu >
+                <ButtonMenu onPress={() => handleDelete(item.id)}>
                   <Icon name='delete' color='black' size={20} />
                 </ButtonMenu>
                 <ButtonMenu >

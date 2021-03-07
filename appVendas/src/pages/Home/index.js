@@ -19,7 +19,7 @@ export default function Home() {
           console.log('item:', res.rows.length);
           if (res.rows.length == 0) {
             txn.executeSql('DROP TABLE IF EXISTS table_produto', []);
-            txn.executeSql('DROP TABLE IF EXISTS table_cagegoria', []);
+            txn.executeSql('DROP TABLE IF EXISTS table_categoria', []);
             txn.executeSql(
               'CREATE TABLE IF NOT EXISTS table_produto(id INTEGER PRIMARY KEY AUTOINCREMENT, descricao VARCHAR(20))',
               []
