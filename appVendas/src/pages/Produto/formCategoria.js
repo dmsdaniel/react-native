@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View } from "react-native";
 import { TextInput } from 'react-native-paper';
+import Header from '../../components/Header';
 import { useForm, Controller } from "react-hook-form";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { List, Area, ButtonMenu, Button } from './style';
@@ -86,7 +87,10 @@ export default function App() {
   }
 
   return (
-    <View style={{ flex: 1, flexDirection: 'column', padding: 10 }}>
+    
+    
+    <View style={{ flex: 1, flexDirection: 'column', padding: 10,backgroundColor: "#000" }}>
+      <Header />
       <Controller
         control={control}
         render={({ onChange, onBlur, value }) => (

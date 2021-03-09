@@ -7,6 +7,7 @@ export const Background = styled.KeyboardAvoidingView`
 
 export const Container = styled.KeyboardAvoidingView`
 flex: 1;
+flex-direction: column;
 background-color: #000;
 margin-bottom: 25px;
 `;

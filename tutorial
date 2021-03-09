@@ -7,6 +7,8 @@ npm install @react-navigation/drawer
 npm install react-native-vector-icons
 react-native link react-native-vector-icons
 npm install styled-components
+npm install react-native-picker-select
+npm install @react-native-community/picker
 
 sqlite
 npm install --save react-native-sqlite-storage
